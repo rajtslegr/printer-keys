@@ -1,4 +1,20 @@
 {
-  "printer-keys.deviceTab.absent": "Tato tiskárna není ve flotile.",
-  "printer-keys.deviceTab.body": "Printer Keys kreslí na záložce tohoto zařízení."
+  "printer-keys.deviceTab.intro": "Každá klávesa zahraje jedno M300 na bzučák této tiskárny. Hrajte myší, klávesami A W S E D F T G Y H U J K (Z a X mění oktávu) nebo MIDI klávesnicí.",
+  "printer-keys.deviceTab.length": "Délka",
+  "printer-keys.deviceTab.lengthValue": "{ms} ms",
+  "printer-keys.deviceTab.octave": "Oktáva",
+  "printer-keys.deviceTab.octaveDown": "O oktávu níž",
+  "printer-keys.deviceTab.octaveUp": "O oktávu výš",
+  "printer-keys.deviceTab.keyboard": "Klaviatura",
+  "printer-keys.deviceTab.lock.absent": "Tato tiskárna není ve flotile.",
+  "printer-keys.deviceTab.lock.offline": "Tiskárna je offline.",
+  "printer-keys.deviceTab.lock.unsupported": "Tato tiskárna nepřijímá G-code příkazy.",
+  "printer-keys.deviceTab.lock.busy": "Tiskárna je zaneprázdněná. Klávesy se odemknou, až bude nečinná.",
+  "printer-keys.deviceTab.midi.none": "MIDI: žádná klávesnice není připojená",
+  "printer-keys.deviceTab.midi.devices": "MIDI: {names}",
+  "printer-keys.deviceTab.midi.insecure": "MIDI potřebuje Prusa Connect otevřený přes HTTPS nebo na localhostu",
+  "printer-keys.deviceTab.midi.refused": "MIDI: prohlížeč přístup odmítl",
+  "printer-keys.deviceTab.midi.unsupported": "MIDI: tento prohlížeč ho nemá",
+  "printer-keys.deviceTab.last": "{note} · {hz} Hz · {ms} ms",
+  "printer-keys.deviceTab.failed": "{note} se nezahrálo: {reason}"
 }

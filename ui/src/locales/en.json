@@ -1,4 +1,20 @@
 {
-  "printer-keys.deviceTab.absent": "This printer is not in the fleet.",
-  "printer-keys.deviceTab.body": "Printer Keys is drawing on this device's tab."
+  "printer-keys.deviceTab.intro": "Every key plays one M300 on this printer's buzzer. Play with the mouse, the keys A W S E D F T G Y H U J K (Z and X move the octave) or a MIDI keyboard.",
+  "printer-keys.deviceTab.length": "Length",
+  "printer-keys.deviceTab.lengthValue": "{ms} ms",
+  "printer-keys.deviceTab.octave": "Octave",
+  "printer-keys.deviceTab.octaveDown": "Octave down",
+  "printer-keys.deviceTab.octaveUp": "Octave up",
+  "printer-keys.deviceTab.keyboard": "Keyboard",
+  "printer-keys.deviceTab.lock.absent": "This printer is not in the fleet.",
+  "printer-keys.deviceTab.lock.offline": "The printer is offline.",
+  "printer-keys.deviceTab.lock.unsupported": "This printer does not take G-code commands.",
+  "printer-keys.deviceTab.lock.busy": "The printer is busy. The keys unlock when it is idle.",
+  "printer-keys.deviceTab.midi.none": "MIDI: no keyboard connected",
+  "printer-keys.deviceTab.midi.devices": "MIDI: {names}",
+  "printer-keys.deviceTab.midi.insecure": "MIDI needs Prusa Connect opened over HTTPS or on localhost",
+  "printer-keys.deviceTab.midi.refused": "MIDI: the browser refused access",
+  "printer-keys.deviceTab.midi.unsupported": "MIDI: this browser has none",
+  "printer-keys.deviceTab.last": "{note} · {hz} Hz · {ms} ms",
+  "printer-keys.deviceTab.failed": "{note} was not played: {reason}"
 }
