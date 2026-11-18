@@ -1,0 +1,7 @@
+export default {
+  singleQuote: true,
+  printWidth: 100,
+  plugins: ['prettier-plugin-svelte', 'prettier-plugin-tailwindcss'],
+  overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
+  tailwindStylesheet: './src/styles.css',
+};

@@ -1,0 +1,8 @@
+/* Only the utilities this bundle uses are emitted; the theme comes from the
+   app. No preflight, which would restyle the host page. */
+@reference 'tailwindcss';
+@reference '@prusa/connect-ui/tokens.css';
+@layer utilities {
+  @tailwind utilities;
+}
+@source './';

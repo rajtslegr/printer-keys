@@ -1,0 +1,23 @@
+# The manifest. The extension is one browser bundle: no process, so no
+# platforms, permissions or OpenAPI fragment. The host derives the id from
+# the repository address: com.github.aux.rajtslegr.printer-keys.
+
+name: printer-keys
+# A directory of files the host verifies against a digest and serves, and never runs.
+kind: asset
+version: 0.1.0
+license: MIT
+require:
+  core: ">=0.1.0-beta.1"
+title: Printer Keys
+summary: Play the printer's buzzer from on-screen keys, the computer keyboard or a MIDI keyboard.
+codeowner: rajtslegr
+
+ui:
+  entry: ui/index.js
+  # The @prusa/connect-ui versions this bundle runs on.
+  library: ">=0.1.0 <1.0.0"
+  contributes:
+    device_tab:
+      - id: printer-keys
+        title: Keys

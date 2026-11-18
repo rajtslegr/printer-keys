@@ -1,0 +1,12 @@
+# This package alone, so pnpm never joins a workspace above it.
+packages:
+  - .
+
+savePrefix: ''
+
+# Refuse to run a script when node_modules has drifted from the lockfile.
+verifyDepsBeforeRun: error
+
+# pnpm turns the global virtual store on outside CI and off inside it; pinned,
+# a local install and a CI install agree.
+enableGlobalVirtualStore: false
