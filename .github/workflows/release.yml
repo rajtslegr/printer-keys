@@ -1,0 +1,34 @@
+name: Release
+
+# A published GitHub release tagged v<version> goes to the marketplace; a
+# pre-release goes to its beta channel. A manual run is a dry run unless told
+# otherwise: it builds, checks and signs, and uploads nothing.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build, check and sign, but do not upload
+        type: boolean
+        default: true
+
+permissions: {}
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  publish:
+    needs: ci
+    uses: prusa3d/prusa-connect-marketplace-publish/.github/workflows/publish.yml@56dae34cf597f36239b0fefea87d07de0c91d236 # v1.0.2
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    with:
+      dry-run: ${{ inputs.dry_run || false }}
+    secrets:
+      PRUSA_CONNECT_EXTENSION_SIGNING_KEY: ${{ secrets.PRUSA_CONNECT_EXTENSION_SIGNING_KEY }}
