@@ -39,16 +39,34 @@ export const midiNoteOn = (data: ArrayLike<number>): number | undefined => {
   return (status & 0xf0) === 0x90 && velocity > 0 ? note : undefined;
 };
 
+/** Inputs that take no letters, so the keys stay on while one has focus (the Length slider). */
+const LETTERLESS_INPUTS = new Set(['range', 'checkbox', 'radio', 'button', 'submit', 'reset']);
+
 /** Whether a key event belongs to a text field rather than to the keys. */
 export const isTypingTarget = (target: unknown): boolean => {
   if (typeof target !== 'object' || target === null) return false;
   if ('isContentEditable' in target && target.isContentEditable === true) return true;
-  return (
-    'tagName' in target &&
-    typeof target.tagName === 'string' &&
-    ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
-  );
+  if (!('tagName' in target) || typeof target.tagName !== 'string') return false;
+  if (target.tagName === 'INPUT') {
+    return !(
+      'type' in target &&
+      typeof target.type === 'string' &&
+      LETTERLESS_INPUTS.has(target.type)
+    );
+  }
+  return ['TEXTAREA', 'SELECT'].includes(target.tagName);
 };
+
+/**
+ * Why the printer refused a command, or undefined when it ran it. A refusal
+ * comes back as a 200 with ok false, so a sent note is not yet a played one.
+ */
+export const refusal = (result: {
+  ok: boolean;
+  fault_code?: string;
+  machine_reason?: string;
+}): string | undefined =>
+  result.ok ? undefined : result.machine_reason || result.fault_code || 'refused';
 
 export type LockReason = 'absent' | 'offline' | 'unsupported' | 'busy';
 

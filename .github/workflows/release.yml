@@ -1,8 +1,9 @@
 name: Release
 
 # A published GitHub release tagged v<version> goes to the marketplace; a
-# pre-release goes to its beta channel. A manual run is a dry run unless told
-# otherwise: it builds, checks and signs, and uploads nothing.
+# pre-release goes to its beta channel. A manual run is a dry run by default,
+# and always when started from a branch, where no tag pins the version: it
+# builds, checks and signs, and uploads nothing.
 on:
   release:
     types: [published]
@@ -29,6 +30,8 @@ jobs:
       id-token: write
       attestations: write
     with:
-      dry-run: ${{ inputs.dry_run || false }}
+      # The extension's id comes from this, so a renamed repository keeps it.
+      module: github.com/rajtslegr/printer-keys
+      dry-run: ${{ inputs.dry_run || !startsWith(github.ref, 'refs/tags/') }}
     secrets:
       PRUSA_CONNECT_EXTENSION_SIGNING_KEY: ${{ secrets.PRUSA_CONNECT_EXTENSION_SIGNING_KEY }}

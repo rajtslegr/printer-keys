@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
+
   import { heldHost } from './host';
   import {
     clampOctave,
@@ -13,6 +15,7 @@
     NoteQueue,
     noteName,
     offsetOfKey,
+    refusal,
   } from './keys';
 
   interface Props {
@@ -37,22 +40,30 @@
   let midi = $state<{ key: string; names?: string }>({ key: 'none' });
 
   interface Note {
+    deviceId: string;
     midi: number;
     ms: number;
   }
 
   const send = async (note: Note): Promise<void> => {
+    // A waiting note is dropped if the tab moved to another printer, or this
+    // one locked, since it was played.
+    if (note.deviceId !== deviceId || lock !== undefined) return;
     const hz = freqOf(note.midi);
     const name = noteName(note.midi);
     try {
-      await host.client.sendDeviceCommand(
+      const result = await host.client.sendDeviceCommand(
         {
-          path: { device_id: deviceId },
+          path: { device_id: note.deviceId },
           body: { verb: GCODE_VERB, args: { gcode: gcodeFor(hz, note.ms) } },
         },
         host.signal,
       );
-      last = t('printer-keys.deviceTab.last', { note: name, hz, ms: note.ms });
+      const reason = refusal(result);
+      last =
+        reason === undefined
+          ? t('printer-keys.deviceTab.last', { note: name, hz, ms: note.ms })
+          : t('printer-keys.deviceTab.failed', { note: name, reason });
     } catch (err) {
       if (host.signal.aborted) return;
       const reason = err instanceof Error ? err.message : String(err);
@@ -62,9 +73,9 @@
 
   const queue = new NoteQueue(send);
 
-  // A printer that starts printing, or leaves, gets none of the notes still waiting.
-  $effect(() => {
-    if (lock !== undefined) queue.clear();
+  // Leaving the tab plays none of the notes still waiting.
+  onDestroy(() => {
+    queue.clear();
   });
 
   const flash = (note: number, length: number) => {
@@ -77,7 +88,7 @@
   const hit = (note: number) => {
     if (lock !== undefined) return;
     const length = ms;
-    if (queue.push({ midi: note, ms: length })) flash(note, length);
+    if (queue.push({ deviceId, midi: note, ms: length })) flash(note, length);
   };
 
   const base = $derived((octave + 1) * 12);
@@ -221,9 +232,11 @@
           onpointerdown={() => {
             hit(key.note);
           }}
-          onclick={(event) => {
-            // Enter or Space on a focused key; a pointer already played on pointerdown.
-            if (event.detail === 0) hit(key.note);
+          onkeydown={(event) => {
+            // Enter or Space on a focused key, once per press like a pointer.
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            if (!event.repeat) hit(key.note);
           }}>{key.label}</button
         >
       {/each}

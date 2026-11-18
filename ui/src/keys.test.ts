@@ -10,6 +10,7 @@ import {
   NoteQueue,
   noteName,
   offsetOfKey,
+  refusal,
 } from './keys';
 
 describe('pitch', () => {
@@ -71,6 +72,14 @@ describe('keys', () => {
     expect(isTypingTarget({ tagName: 'BUTTON' })).toBe(false);
     expect(isTypingTarget(null)).toBe(false);
   });
+
+  it('leaves the keys on in a slider, checkbox or button input', () => {
+    expect(isTypingTarget({ tagName: 'INPUT', type: 'range' })).toBe(false);
+    expect(isTypingTarget({ tagName: 'INPUT', type: 'checkbox' })).toBe(false);
+    expect(isTypingTarget({ tagName: 'INPUT', type: 'button' })).toBe(false);
+    expect(isTypingTarget({ tagName: 'INPUT', type: 'text' })).toBe(true);
+    expect(isTypingTarget({ tagName: 'INPUT', type: 'search' })).toBe(true);
+  });
 });
 
 describe('lockReason', () => {
@@ -97,6 +106,20 @@ describe('lockReason', () => {
       expect(lockReason({ ...idle, state: { '/state': state } })).toBe('busy');
     }
     expect(lockReason({ ...idle, state: {} })).toBe('busy');
+  });
+});
+
+describe('refusal', () => {
+  it('is nothing when the printer ran the command', () => {
+    expect(refusal({ ok: true })).toBeUndefined();
+  });
+
+  it("gives the printer's reason, else its fault code", () => {
+    expect(refusal({ ok: false, fault_code: 'BUSY', machine_reason: 'Printer is busy' })).toBe(
+      'Printer is busy',
+    );
+    expect(refusal({ ok: false, fault_code: 'core.printer/REFUSED' })).toBe('core.printer/REFUSED');
+    expect(refusal({ ok: false, machine_reason: '' })).toBe('refused');
   });
 });
 
